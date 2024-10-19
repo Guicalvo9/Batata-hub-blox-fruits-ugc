@@ -1,0 +1,175 @@
+-- Script Orion para UGC Blox Fruits Clicker:
+
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+local Window = OrionLib:MakeWindow({Name = "Batata Hub", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+
+-- Função para clicar automaticamente
+local clicking = false
+local function autoClick()
+while clicking do
+game:GetService("ReplicatedStorage").Remotes.Click:FireServer()
+wait(0.01) -- Ajuste o tempo de espera para clicar rapidamente
+end
+end
+
+-- Função para girar a roda UGC automaticamente
+local spinningUGC = false
+local function autoSpinUGC()
+while spinningUGC do
+game:GetService("ReplicatedStorage").Remotes.SpinUgcWheel:FireServer()
+wait(8.00) -- Ajuste o tempo de espera para girar rapidamente
+end
+end
+
+-- Função para girar a roda normal automaticamente
+local spinningNormal = false
+local function autoSpinNormal()
+while spinningNormal do
+game:GetService("ReplicatedStorage").Remotes.SpinWheel:FireServer()
+wait(8.00) -- Ajuste o tempo de espera para girar rapidamente
+end
+end
+
+-- Criar aba no Orion para Auto Clicker
+local Tab = Window:MakeTab({
+Name = "Auto Clicker",
+Icon = "rbxassetid://4483345998",
+PremiumOnly = false
+})
+
+-- Adicionar toggle para clicar automaticamente
+Tab:AddToggle({
+Name = "Auto Click",
+Default = false,
+Callback = function(Value)
+clicking = Value
+if clicking then
+spawn(autoClick)
+end
+end
+})
+
+-- Adicionar toggle para girar a roda UGC automaticamente
+Tab:AddToggle({
+Name = "Auto UGC Spin",
+Default = false,
+Callback = function(Value)
+spinningUGC = Value
+if spinningUGC then
+spawn(autoSpinUGC)
+end
+end
+})
+
+-- Adicionar toggle para girar a roda normal automaticamente
+Tab:AddToggle({
+Name = "Auto Normal Spin",
+Default = false,
+Callback = function(Value)
+spinningNormal = Value
+if spinningNormal then
+spawn(autoSpinNormal)
+end
+end
+})
+
+-- Criar aba no Orion para Shop
+local ShopTab = Window:MakeTab({
+Name = "Shop",
+Icon = "rbxassetid://4483345998",
+PremiumOnly = false
+})
+
+-- Adicionar botão para comprar ovo comum
+ShopTab:AddButton({
+Name = "Buy Common Egg (1000 Clicks)",
+Callback = function()
+local args = {
+[1] = "Common"
+}
+game:GetService("ReplicatedStorage").Remotes.BuyEgg:FireServer(unpack(args))
+end
+})
+
+-- Adicionar botão para comprar ovo incomum
+ShopTab:AddButton({
+Name = "Buy Uncommon Egg (10.000 Clicks)",
+Callback = function()
+local args = {
+[1] = "Uncommon"
+}
+game:GetService("ReplicatedStorage").Remotes.BuyEgg:FireServer(unpack(args))
+end
+})
+
+-- Adicionar botão para comprar ovo limitado com 50 chaves
+ShopTab:AddButton({
+Name = "Buy Limited Egg (50 Keys)",
+Callback = function()
+local args = {
+[1] = "Limited"
+}
+game:GetService("ReplicatedStorage").Remotes.BuyEgg:FireServer(unpack(args))
+end
+})
+
+-- Criar aba no Orion para Teleport
+local TeleportTab = Window:MakeTab({
+Name = "Teleport",
+Icon = "rbxassetid://4483345998",
+PremiumOnly = false
+})
+
+-- Adicionar botão para teletransportar para a posição especificada
+TeleportTab:AddButton({
+Name = "Teleport to boost zone",
+Callback = function()
+local player = game.Players.LocalPlayer
+if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+player.Character.HumanoidRootPart.CFrame = CFrame.new(621, 388, -272)
+end
+end
+})
+
+-- Adicionar botão para teletransportar para o daily chest
+TeleportTab:AddButton({
+Name = "Teleport Daily Chest",
+Callback = function()
+local player = game.Players.LocalPlayer
+if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+player.Character.HumanoidRootPart.CFrame = CFrame.new(681, 402, -349)
+end
+end
+})
+
+-- Adicionar botão para teletransportar para as coordenadas X: 617, Y: 389, Z: -64
+TeleportTab:AddButton({
+Name = "Teleport to click zone",
+Callback = function()
+local player = game.Players.LocalPlayer
+if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+player.Character.HumanoidRootPart.CFrame = CFrame.new(617, 389, -64)
+end
+end
+})
+
+-- Adicionar toggle para auto collect click zone click
+local autoCollect = false
+
+Tab:AddToggle({
+Name = "Auto Collect Click Zone Click",
+Default = false,
+Callback = function(value)
+autoCollect = value
+while autoCollect do
+local args = {
+[1] = "2"
+}
+game:GetService("ReplicatedStorage").Remotes.CollectClicks:FireServer(unpack(args))
+wait(0.1) -- ajustar o tempo de espera conforme necessário
+end
+end
+})
+
+OrionLib:Init()
